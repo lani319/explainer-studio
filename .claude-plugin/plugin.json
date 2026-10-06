@@ -1,0 +1,8 @@
+{
+  "name": "explainer-studio",
+  "version": "0.1.0",
+  "description": "Turn documents, folders or git repositories into narrated explainer videos (MP4 + SRT) in Korean, English, Japanese, Chinese or Spanish.",
+  "author": { "name": "lani319" },
+  "repository": "https://github.com/lani319/explainer-studio",
+  "keywords": ["video", "explainer", "tutorial", "tts", "subtitles", "multilingual", "motion-graphics"]
+}

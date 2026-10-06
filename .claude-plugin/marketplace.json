@@ -1,0 +1,11 @@
+{
+  "name": "explainer-studio",
+  "owner": { "name": "lani319" },
+  "plugins": [
+    {
+      "name": "explainer-studio",
+      "source": "./",
+      "description": "Narrated explainer videos from your own documents or git repositories, in five languages."
+    }
+  ]
+}

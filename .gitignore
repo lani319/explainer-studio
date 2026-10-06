@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+# generated per build — the scripts are the source of truth
+examples/*/build/
+examples/*/out/stills/
+# a user's working folder when running the skill inside this repo
+/explainer/

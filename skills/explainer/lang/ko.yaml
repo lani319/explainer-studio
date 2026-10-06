@@ -1,0 +1,28 @@
+code: ko
+name: 한국어
+html_lang: ko
+voices:
+  female: ko-KR-SunHiNeural
+  male: ko-KR-InJoonNeural
+rate: "+0%"
+gap: 0.35          # seconds of silence between narration lines
+cps: 7.0           # spoken characters per second (no spaces) — used for estimates and pacing warnings
+wrap: word         # Korean breaks between words (keep-all)
+screen_width: 32   # characters per on-screen subtitle line (44px on a 1424px box)
+srt_width: 32
+font: '"Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif'
+word_break: keep-all
+ui:
+  unofficial: ""
+  sources: 출처
+  next: 다음
+  recap: 이번 편에서 본 것
+say:
+  - ['①', '1항 ']
+  - ['②', '2항 ']
+  - ['③', '3항 ']
+  - ['④', '4항 ']
+  - ['ㆍ', ', ']
+  - ['·', ', ']
+  - ['\s*→\s*', ', ']
+  - ['—', ', ']

@@ -1,0 +1,23 @@
+code: ja
+name: 日本語
+html_lang: ja
+voices:
+  female: ja-JP-NanamiNeural
+  male: ja-JP-KeitaNeural
+rate: "+0%"
+gap: 0.35
+cps: 8.0
+wrap: char
+screen_width: 32   # characters per on-screen subtitle line (44px on a 1424px box)
+srt_width: 22
+font: '"Yu Gothic UI", "Yu Gothic", "Meiryo", "Hiragino Sans", "Noto Sans JP", sans-serif'
+word_break: normal
+ui:
+  unofficial: 非公式訳
+  sources: 出典
+  next: 次へ
+  recap: このエピソードのまとめ
+say:
+  - ['\s*→\s*', '、']
+  - ['—', '、']
+  - ['・', '、']

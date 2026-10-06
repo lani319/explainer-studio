@@ -1,0 +1,23 @@
+code: zh
+name: 中文
+html_lang: zh-CN
+voices:
+  female: zh-CN-XiaoxiaoNeural
+  male: zh-CN-YunxiNeural
+rate: "+0%"
+gap: 0.35
+cps: 5.5
+wrap: char
+screen_width: 32   # characters per on-screen subtitle line (44px on a 1424px box)
+srt_width: 20
+font: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif'
+word_break: normal
+ui:
+  unofficial: 非官方译文
+  sources: 来源
+  next: 下一步
+  recap: 本集回顾
+say:
+  - ['\s*→\s*', '，']
+  - ['—', '，']
+  - ['·', '、']

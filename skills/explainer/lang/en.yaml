@@ -1,0 +1,24 @@
+code: en
+name: English
+html_lang: en
+voices:
+  female: en-US-JennyNeural
+  male: en-US-GuyNeural
+rate: "+0%"
+gap: 0.30
+cps: 14.0
+wrap: word
+screen_width: 62   # characters per on-screen subtitle line (44px on a 1424px box)
+srt_width: 42
+font: '"Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+word_break: normal
+ui:
+  unofficial: Unofficial translation
+  sources: Sources
+  next: Next
+  recap: What we covered
+say:
+  - ['\s*→\s*', ', then ']
+  - ['—', ', ']
+  - ['·', ', ']
+  - ['&', ' and ']
