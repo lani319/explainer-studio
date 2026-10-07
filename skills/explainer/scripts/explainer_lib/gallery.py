@@ -10,9 +10,11 @@ import shutil
 from collections.abc import Callable
 from pathlib import Path
 
-from .build import DEFAULT_TEMPLATE, build, templates
+from .brand import is_path
+from .build import DEFAULT_TEMPLATE, build, resolve_template, templates
 from .paths import Episode
 from .render import stills
+from .script import load
 
 THUMB_W = 640
 
@@ -29,13 +31,17 @@ def make(
     from playwright.sync_api import sync_playwright
 
     names = names or sorted(templates(), key=lambda n: (n != DEFAULT_TEMPLATE, n))  # default first
+    own = resolve_template(load(ep.script(code)), None, ep.root)
+    if is_path(own) and own not in names:
+        names = [own, *names]  # the episode's own template first
     work = ep.root / "build" / "_gallery"
     shots: dict[str, list[Path]] = {}
     for name in names:
-        bdir = ep.root / "build" / f"{code}@{name}"
+        label = Path(name).stem if is_path(name) else name
+        bdir = ep.root / "build" / f"{code}@{label}"
         build(ep, code, engine=engine, template=name, out=bdir, log=lambda _m: None)
-        shots[name] = stills(ep, code, marks, bdir=bdir, out_dir=work / name, log=lambda _m: None)
-        log(f"  {name}: {len(shots[name])} stills")
+        shots[label] = stills(ep, code, marks, bdir=bdir, out_dir=work / label, log=lambda _m: None)
+        log(f"  {label}: {len(shots[label])} stills")
 
     page = work / "gallery.html"
     rows = "".join(
@@ -67,7 +73,7 @@ img {{ width: {THUMB_W}px; border-radius: 8px; display: block; }}
         pg.wait_for_load_state("load")
         pg.screenshot(path=str(out_png), full_page=True)
         browser.close()
-    for name in names:
-        shutil.rmtree(ep.root / "build" / f"{code}@{name}", ignore_errors=True)
+    for label in shots:
+        shutil.rmtree(ep.root / "build" / f"{code}@{label}", ignore_errors=True)
     log(f"wrote {out_png}")
     return out_png

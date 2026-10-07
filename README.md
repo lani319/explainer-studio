@@ -133,6 +133,21 @@ python $S build explainer/intro --template blueprint  # try another look without
 python $S templates explainer/intro --lang en         # gallery of your episode in every template
 ```
 
+### Your own design
+
+Bring a brand guide, sample slides, a logo, color codes or font files — Claude reads them and turns them into a template of your own, then shows it next to the built-in ones:
+
+```yaml
+template: ../brand/brand.css        # your template: a copy of a built-in one with your tokens
+theme:
+  accent: "#0f766e"                 # any single token on top
+  logo: ../brand/logo.svg           # top-right on every scene and on the cover
+  fonts:
+    - {family: Brand Sans, file: ../brand/BrandSans-Bold.woff2, weight: 800}
+```
+
+Builds warn when colors would be hard to read (`low contrast 2.6:1 (needs 4.5:1) — subtitles`), so brand colors don't quietly ruin legibility. Details: [templates.md](skills/explainer/references/templates.md#your-own-design).
+
 When Claude plans an episode with you, it shows the gallery and asks which template to use. A template is one CSS file of design tokens in [`skills/explainer/engine/themes/`](skills/explainer/engine/themes) — copy one to make your own ([how](skills/explainer/references/templates.md)).
 
 ## Documentation

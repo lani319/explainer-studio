@@ -113,6 +113,21 @@ python $S build explainer/intro --template blueprint  # 대본을 고치지 않�
 python $S templates explainer/intro --lang ko         # 내 편을 템플릿별로 나란히 본 미리보기
 ```
 
+### 내 디자인 쓰기
+
+브랜드 가이드, 샘플 슬라이드, 로고, 색상 코드, 글꼴 파일을 주면 Claude 가 읽고 나만의 템플릿으로 만든 뒤 내장 템플릿과 나란히 보여 줍니다.
+
+```yaml
+template: ../brand/brand.css        # 내 템플릿: 내장 템플릿을 복사해 값만 바꾼 것
+theme:
+  accent: "#0f766e"                 # 값 하나씩 덮어쓰기
+  logo: ../brand/logo.svg           # 모든 장면 우상단과 표지에 표시
+  fonts:
+    - {family: Brand Sans, file: ../brand/BrandSans-Bold.woff2, weight: 800}
+```
+
+색 때문에 글자가 잘 안 읽히면 빌드가 경고합니다(`low contrast 2.6:1 (needs 4.5:1) — subtitles`). 브랜드 색이 가독성을 조용히 망치지 않게 하려는 것입니다. 자세한 내용은 [templates.md](skills/explainer/references/templates.md#your-own-design).
+
 Claude 와 편 구성을 정할 때 이 미리보기를 보여 주고 템플릿을 묻습니다. 템플릿은 [`skills/explainer/engine/themes/`](skills/explainer/engine/themes) 의 CSS 파일 하나(디자인 토큰 모음)라, 하나를 복사해 나만의 템플릿을 만들 수 있습니다([방법](skills/explainer/references/templates.md)).
 
 ## 참고

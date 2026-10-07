@@ -47,6 +47,15 @@ Ask, in one message, with a recommendation for each:
 
 Write the plan to `explainer/plan.md` and wait for approval.
 
+### 3b. If the user brings their own design
+
+A brand guide, a sample slide or screenshot, a logo, color codes, font files — turn them into a template instead of hand-tuning scenes (details: `references/templates.md#your-own-design`):
+
+1. **Look** at the images and documents yourself. Note: background (light or dark), text color, one or two accent colors, a muted color, corner style, heading font. Use exact codes when the material gives them; otherwise pick from the image and say they are approximations.
+2. **Write** `explainer/brand/brand.css`: copy the closest built-in template (`paper` for light, `midnight` for dark) and change only the tokens. Put logo and font files in `explainer/brand/`.
+3. **Point** each script at it: `template: ../brand/brand.css`, plus `theme: {logo: ../brand/logo.svg, fonts: [...]}` if there is a logo or font files.
+4. **Check**: `build` prints `low contrast` warnings — fix every one (brand colors often fail as text or subtitle colors; keep the brand color as `accent` and use a darker or lighter variant for text). Then run `templates <episode> --lang <code>` so the user sees their template next to the built-in ones, and ask for approval.
+
 ### 4. Write the scripts
 
 ```bash

@@ -83,9 +83,9 @@
   }
 
   function applyTheme(root, meta) {
+    // token overrides from the script's `theme:` (validated by the build), e.g. {"--accent": "#e4572e"}
     const th = meta.theme || {};
-    const map = { accent: "--accent", accent2: "--accent2", bg: "--bg", bg2: "--bg2", fg: "--fg", muted: "--muted" };
-    for (const k in map) if (th[k]) root.style.setProperty(map[k], th[k]);
+    for (const k in th) root.style.setProperty(k.startsWith("--") ? k : `--${k}`, th[k]);
     root.style.setProperty("--font", meta.font || "sans-serif");
     root.style.setProperty("--word-break", meta.word_break || "normal");
     document.documentElement.lang = meta.html_lang || meta.lang || "en";
@@ -103,7 +103,13 @@
     const layer = el("div", "scenes", stage);
     const tag = el("div", "chapter", stage);
     const tagText = el("span", "", tag);
-    el("div", "brand", stage, rich(TL.meta.title));
+    const head = el("div", "head-right", stage);
+    el("div", "brand", head, rich(TL.meta.title));
+    if (TL.meta.logo) {
+      const logo = el("img", "logo", head);
+      logo.src = TL.meta.logo;
+      logo.alt = "";
+    }
     const sub = el("div", "subtitle", stage);
     const bar = el("div", "progress", stage);
 
@@ -164,7 +170,8 @@
 
     window.__seek = seek;
     seek(0);
-    document.fonts.ready.then(() => {
+    const images = [...stage.querySelectorAll("img")].map((im) => (im.complete ? Promise.resolve() : new Promise((r) => (im.onload = im.onerror = r))));
+    Promise.all([document.fonts.ready, ...images]).then(() => {
       window.__ready = true;
     });
     if (render) return;

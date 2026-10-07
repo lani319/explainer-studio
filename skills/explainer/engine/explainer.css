@@ -26,6 +26,7 @@
   --shadow: none;
   --glow: 0 0 18px var(--accent);
   --em-decoration: none;
+  --logo-height: 52px;
   --font: sans-serif;
   --heading-font: var(--font);
   --label-font: var(--font);
@@ -59,7 +60,9 @@ body.render .viewport { width: 1920px; height: 1080px; }
 }
 .chapter::before { content: ""; width: 8px; height: 34px; border-radius: 4px; background: var(--accent); }
 .chapter.hidden { opacity: 0; }
-.brand { position: absolute; right: 72px; top: 58px; font-family: var(--label-font); font-size: 22px; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+.head-right { position: absolute; right: 72px; top: 44px; height: 60px; display: flex; align-items: center; gap: 22px; }
+.brand { font-family: var(--label-font); font-size: 22px; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+.logo { height: var(--logo-height); max-width: 280px; object-fit: contain; }
 
 .subtitle {
   position: absolute; left: 50%; bottom: 74px; transform: translateX(-50%); width: 1500px;
@@ -75,6 +78,7 @@ body.render .viewport { width: 1920px; height: 1080px; }
 
 /* ---------- cover ---------- */
 .cover-text { position: absolute; left: 150px; top: 290px; width: 980px; }
+.cover-logo { display: block; height: calc(var(--logo-height) * 1.5); max-width: 520px; object-fit: contain; object-position: left center; margin-bottom: 30px; }
 .kicker { font-family: var(--label-font); font-size: 34px; font-weight: 800; color: var(--accent); letter-spacing: 0.08em; }
 .cover-title { margin-top: 18px; font-family: var(--heading-font); font-size: 128px; font-weight: 900; line-height: 1.08; white-space: nowrap; }
 .cover-title span { display: inline-block; }

@@ -22,6 +22,12 @@
     const rings = [0, 1, 2].map((i) => el("div", `ring r${i}`, orbit));
     const sparks = Array.from({ length: 14 }, (_, i) => el("div", "spark", orbit, null));
     const col = el("div", "cover-text", wrap);
+    let logo = null;
+    if (ctx.meta.logo) {
+      logo = el("img", "cover-logo", col);
+      logo.src = ctx.meta.logo;
+      logo.alt = "";
+    }
     const kicker = el("div", "kicker", col, rich(s.kicker));
     const title = el("div", "cover-title", col);
     const chars = [...String(s.title ?? "")].map((c) => el("span", "", title, c === " " ? "&nbsp;" : rich(c)));
@@ -38,6 +44,7 @@
     };
     return (t) => {
       fit();
+      if (logo) appear(logo, t, 0.0, { dy: -16 });
       appear(kicker, t, 0.1, { dx: -30, dy: 0 });
       chars.forEach((c, i) => {
         const p = prog(t, 0.25 + i * 0.045, 0.6);

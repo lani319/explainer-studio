@@ -8,6 +8,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from . import brand as brandmod
 from . import lang as langmod
 from . import media, timeline, tts
 from .paths import ENGINE_DIR, Episode
@@ -22,8 +23,8 @@ PAGE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
 <link rel="stylesheet" href="engine/explainer.css" />
-<link rel="stylesheet" href="engine/themes/{template}.css" />
-</head>
+<link rel="stylesheet" href="{template_href}" />
+{font_link}</head>
 <body class="template-{template}">
 <div id="app"></div>
 <script src="timeline.js"></script>
@@ -40,11 +41,17 @@ def templates() -> list[str]:
     return sorted(p.stem for p in (ENGINE_DIR / "themes").glob("*.css"))
 
 
-def resolve_template(script: Script, override: str | None) -> str:
+def resolve_template(script: Script, override: str | None, base: Path | None = None) -> str:
+    """A built-in template name, or the path of the user's own template CSS (relative to the episode)."""
     name = override or str(script.meta.get("template") or DEFAULT_TEMPLATE)
+    if brandmod.is_path(name):
+        path = Path(name) if Path(name).is_absolute() else (base or Path.cwd()) / name
+        if not path.is_file():
+            raise ValueError(f"template file not found — {path}")
+        return str(path.resolve())
     have = templates()
     if name not in have:
-        raise ValueError(f"unknown template '{name}' — choose one of {', '.join(have)}")
+        raise ValueError(f"unknown template '{name}' — choose one of {', '.join(have)}, or give a .css path")
     return name
 
 
@@ -63,12 +70,15 @@ def build(
     script = load(ep.script(code))
     if script.lang != code:
         raise ValueError(f"{ep.script(code)} says lang '{script.lang}' but the file name says '{code}'")
-    tpl = resolve_template(script, template)
+    tpl = resolve_template(script, template, ep.root)
+    theme = brandmod.parse_theme(script.meta.get("theme"), ep.root)
     _check_translations(ep, script, log)
     durations, clips = tts.synthesize(script, lang, engine=engine, voice=voice, log=log)
     tl = timeline.build(script, lang, durations)
-    tl["meta"]["template"] = tpl
     for w in timeline.pacing_warnings(script, lang, durations):
+        log(f"  warn {w}")
+    tpl_css = Path(tpl) if brandmod.is_path(tpl) else ENGINE_DIR / "themes" / f"{tpl}.css"
+    for w in brandmod.contrast_warnings([brandmod.tokens(), brandmod.css_tokens(tpl_css), theme.vars]):
         log(f"  warn {w}")
 
     out = out or ep.build_dir(code)
@@ -83,13 +93,29 @@ def build(
         shutil.copy2(custom, out / "scenes.custom.js")
         extra = '<script src="scenes.custom.js"></script>\n'
 
+    template_href = brandmod.copy_template(tpl_css, out) if brandmod.is_path(tpl) else f"engine/themes/{tpl}.css"
+    logo_href, fonts_href = brandmod.ship_assets(theme, out)
+    tl["meta"]["template"] = tpl_css.stem
+    tl["meta"]["theme"] = theme.vars
+    tl["meta"]["logo"] = logo_href
+    if theme.font:
+        tl["meta"]["font"] = f"{_quote(theme.font)}, {lang.font}"
+
     has_audio = engine != "none"
     tl["audio"] = "narration.m4a" if has_audio else None
     (out / "timeline.js").write_text(
         "window.TIMELINE = " + json.dumps(tl, ensure_ascii=False, indent=1) + ";\n", encoding="utf-8"
     )
     (out / "index.html").write_text(
-        PAGE.format(html_lang=lang.html_lang, title=_esc(script.title), template=tpl, extra=extra), encoding="utf-8"
+        PAGE.format(
+            html_lang=lang.html_lang,
+            title=_esc(script.title),
+            template=_esc(tpl_css.stem),
+            template_href=template_href,
+            font_link=f'<link rel="stylesheet" href="{fonts_href}" />\n' if fonts_href else "",
+            extra=extra,
+        ),
+        encoding="utf-8",
     )
     if has_audio:
         placed = [
@@ -102,7 +128,8 @@ def build(
     if out == ep.build_dir(code):
         ep.out_dir().mkdir(parents=True, exist_ok=True)
         ep.srt(code).write_text(timeline.srt(tl, lang, script), encoding="utf-8")
-    log(f"built {ep.id} [{code}] {tpl} — {len(script.sections)} sections, {tl['duration']:.1f}s → {out / 'index.html'}")
+    log(f"built {ep.id} [{code}] {tpl_css.stem} — {len(script.sections)} sections, {tl['duration']:.1f}s")
+    log(f"  → {out / 'index.html'}")
     return tl
 
 
@@ -116,6 +143,11 @@ def _check_translations(ep: Episode, script: Script, log: Callable[[str], None])
                 log(f"  warn {p}")
         except Exception as exc:  # noqa: BLE001 — a broken sibling script must not block this build
             log(f"  warn cannot compare with {other}: {exc}")
+
+
+def _quote(family: str) -> str:
+    """Quote a single family name; leave a stack ("A", B, serif) as written."""
+    return family if "," in family or family.startswith(('"', "'")) else f'"{family}"'
 
 
 def _esc(s: str) -> str:
