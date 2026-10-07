@@ -48,8 +48,10 @@ def make(
     page.write_text(
         f"""<!doctype html><meta charset="utf-8"><style>
 body {{ margin: 0; background: #111827; font-family: "Segoe UI", Arial, sans-serif; }}
-.grid {{ display: grid; grid-template-columns: 200px repeat({cols}, {THUMB_W}px); gap: 16px; padding: 24px 24px 24px 0; }}
-.name {{ color: #e5e7eb; font-size: 26px; font-weight: 700; display: flex; align-items: center; justify-content: flex-end; }}
+.grid {{ display: grid; grid-template-columns: 200px repeat({cols}, {THUMB_W}px);
+  gap: 16px; padding: 24px 24px 24px 0; }}
+.name {{ color: #e5e7eb; font-size: 26px; font-weight: 700;
+  display: flex; align-items: center; justify-content: flex-end; }}
 img {{ width: {THUMB_W}px; border-radius: 8px; display: block; }}
 </style><div class="grid">{rows}</div>""",
         encoding="utf-8",
