@@ -1,6 +1,9 @@
 {
   "name": "explainer-studio",
-  "owner": { "name": "lani319" },
+  "description": "Narrated explainer videos from your own documents or git repositories, in Korean, English, Japanese, Chinese and Spanish.",
+  "owner": {
+    "name": "lani319"
+  },
   "plugins": [
     {
       "name": "explainer-studio",
