@@ -78,4 +78,4 @@ python $S render explainer/intro             # → explainer/intro/out/intro.ko.
 
 ## 라이선스
 
-아직 정하지 않았습니다. 라이선스 파일이 추가되기 전까지는 모든 권리를 보유합니다.
+코드는 [MIT](LICENSE) 입니다. 예시 대본이 인용한 헌법 조문은 저작권 보호 대상이 아니며, `examples/` 의 번역과 영상도 같은 라이선스로 공개합니다.

@@ -106,4 +106,4 @@ Per-language settings are plain YAML in [`skills/explainer/lang/`](skills/explai
 
 ## License
 
-Not yet decided — all rights reserved until a license file is added.
+[MIT](LICENSE) for the code. The example scripts quote a public-domain text; the translations and videos in `examples/` are released under the same license.

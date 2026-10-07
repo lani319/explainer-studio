@@ -4,5 +4,6 @@
   "description": "Turn documents, folders or git repositories into narrated explainer videos (MP4 + SRT) in Korean, English, Japanese, Chinese or Spanish.",
   "author": { "name": "lani319" },
   "repository": "https://github.com/lani319/explainer-studio",
+  "license": "MIT",
   "keywords": ["video", "explainer", "tutorial", "tts", "subtitles", "multilingual", "motion-graphics"]
 }
