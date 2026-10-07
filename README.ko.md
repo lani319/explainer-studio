@@ -45,7 +45,7 @@ python skills/explainer/scripts/cli.py doctor --online
 
 플러그인으로 설치:
 
-```
+```text
 /plugin marketplace add lani319/explainer-studio
 /plugin install explainer-studio@explainer-studio
 ```
@@ -55,6 +55,19 @@ python skills/explainer/scripts/cli.py doctor --online
 > ./docs 의 문서로 신입 팀원용 3분짜리 설명 영상을 한국어와 영어로 만들어 줘.
 
 Claude 가 환경을 점검하고, 자료 목록을 만들고, 편 구성을 제안해 승인을 받은 뒤, 대본 작성 → 빌드 → 정지 화면 검수 → 렌더까지 진행합니다.
+
+### Codex 에서 쓰기
+
+이 스킬은 지시문과 파이썬 명령줄 도구로 되어 있어서, Codex 처럼 파일을 읽고 명령을 실행할 수 있는 에이전트라면 따라 할 수 있습니다. 이 저장소를 받아 둔 뒤, 프로젝트의 `AGENTS.md` 에 몇 줄을 넣습니다.
+
+```markdown
+## 설명 영상
+설명·튜토리얼·교육 영상을 만들어 달라는 요청이 오면
+`/path/to/explainer-studio/skills/explainer/SKILL.md` 를 읽고 그 순서대로 진행한다.
+그 파일의 `<skill>` 은 `/path/to/explainer-studio/skills/explainer` 를 뜻한다.
+```
+
+그다음 Claude 에게 하듯 Codex 에 요청하면 됩니다. 쓰는 Codex 버전이 스킬 폴더를 읽는다면 `skills/explainer` 를 그 폴더에 복사해도 됩니다(버전별 문서 확인).
 
 ### 직접 쓰기
 
@@ -69,6 +82,38 @@ python $S render explainer/intro             # → explainer/intro/out/intro.ko.
 ```
 
 `--tts none` 은 인터넷 없이 시간을 추정한 무음 초안을 만듭니다. `--voice male` 은 남성 음성으로 바꿉니다.
+
+## 디자인 템플릿
+
+배치는 같고 모양만 다른 4종 중에서 편마다 고릅니다. 어떤 대본이든 모든 템플릿에서 깨지지 않습니다.
+
+![디자인 템플릿 4종](docs/templates.ko.png)
+
+| 템플릿 | 모양 | 어울리는 곳 |
+|---|---|---|
+| `midnight` (기본) | 짙은 남색, 하늘색·보라 강조 | 일반 설명 |
+| `paper` | 따뜻한 종이색, 세리프 제목, 먹색·적갈색 | 문서·규정·보고 |
+| `blueprint` | 파란 격자 도면, 호박색 강조, 고정폭 라벨 | 기술·코드·구조 설명 |
+| `chalk` | 초록 칠판, 점선 테두리, 물결 밑줄 | 강의·교육 |
+
+대본 머리말에서 고르거나, 빌드할 때 바꿔 볼 수 있습니다.
+
+```yaml
+---
+id: intro
+lang: ko
+template: paper
+theme: {accent: "#e4572e"}   # 선택: 템플릿 위에 브랜드 색 덮어쓰기
+---
+```
+
+```bash
+python $S templates                                   # 템플릿 목록
+python $S build explainer/intro --template blueprint  # 대본을 고치지 않고 다른 모양으로
+python $S templates explainer/intro --lang ko         # 내 편을 템플릿별로 나란히 본 미리보기
+```
+
+Claude 와 편 구성을 정할 때 이 미리보기를 보여 주고 템플릿을 묻습니다. 템플릿은 [`skills/explainer/engine/themes/`](skills/explainer/engine/themes) 의 CSS 파일 하나(디자인 토큰 모음)라, 하나를 복사해 나만의 템플릿을 만들 수 있습니다([방법](skills/explainer/references/templates.md)).
 
 ## 참고
 

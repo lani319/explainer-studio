@@ -3,7 +3,8 @@ id: {{id}}
 lang: {{lang}}
 title: {{title}}
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: {{template}}   # midnight | paper | blueprint | chalk — see `cli.py templates`
+# theme: {accent: "#e4572e"}   # optional brand colors on top of the template
 sources:
   - Where the facts in this episode come from
 ---

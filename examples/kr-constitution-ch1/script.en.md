@@ -3,7 +3,7 @@ id: kr-constitution-ch1
 lang: en
 title: Constitution of the Republic of Korea · Chapter 1
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: midnight
 sources:
   - Constitution of the Republic of Korea (Constitution No. 10, wholly amended 29 Oct 1987, in force 25 Feb 1988) — law.go.kr
   - Korean text via legalize-kr/legalize-kr · kr/대한민국헌법/헌법.md

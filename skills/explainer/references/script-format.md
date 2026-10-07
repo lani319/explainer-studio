@@ -8,7 +8,8 @@ id: my-episode            # folder name; used in output file names
 lang: en                  # ko | en | ja | zh | es — must match the file name
 title: Episode title      # shown top-right on every scene
 voice: female             # female | male | a full edge-tts voice id
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}   # optional: accent, accent2, bg, bg2, fg, muted
+template: midnight        # midnight | paper | blueprint | chalk — see templates.md
+theme: {accent: "#e4572e"}  # optional brand colors over the template: accent, accent2, bg, bg2, fg, muted
 sources:                  # shown on the closing scene
   - Document or repository the facts come from
 ---

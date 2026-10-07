@@ -37,8 +37,8 @@ def render(
 ) -> Path:
     from playwright.sync_api import sync_playwright
 
-    ensure_built(ep, code)
     bdir = ep.build_dir(code)
+    ensure_built(bdir)
     tl = _timeline(bdir)
     total = float(tl["duration"])
     frames = int(total * fps)
@@ -55,7 +55,7 @@ def render(
     args += ["-movflags", "+faststart", str(out)]
     log(f"render {ep.id} [{code}] {total:.1f}s × {fps}fps = {frames} frames")
     with sync_playwright() as p:
-        browser, page = _open(p, page_url(ep, code))
+        browser, page = _open(p, page_url(bdir))
         proc = subprocess.Popen(args, stdin=subprocess.PIPE)
         assert proc.stdin is not None
         try:
@@ -74,19 +74,26 @@ def render(
     return out
 
 
-def stills(ep: Episode, code: str, marks: list[str], log: Callable[[str], None] = print) -> list[Path]:
+def stills(
+    ep: Episode,
+    code: str,
+    marks: list[str],
+    bdir: Path | None = None,
+    out_dir: Path | None = None,
+    log: Callable[[str], None] = print,
+) -> list[Path]:
     """Still frames for review. A mark is seconds (``42.5``) or ``section:seconds`` (``art1:3``)."""
     from playwright.sync_api import sync_playwright
 
-    ensure_built(ep, code)
-    bdir = ep.build_dir(code)
+    bdir = bdir or ep.build_dir(code)
+    ensure_built(bdir)
     tl = _timeline(bdir)
     starts = {s["id"]: float(s["t0"]) for s in tl["sections"]}
-    out_dir = ep.out_dir() / "stills" / code
+    out_dir = out_dir or ep.out_dir() / "stills" / code
     out_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
     with sync_playwright() as p:
-        browser, page = _open(p, page_url(ep, code))
+        browser, page = _open(p, page_url(bdir))
         for mark in marks:
             if ":" in mark:
                 sid, sec = mark.split(":", 1)

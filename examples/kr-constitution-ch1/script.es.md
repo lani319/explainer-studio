@@ -3,7 +3,7 @@ id: kr-constitution-ch1
 lang: es
 title: Constitución de la República de Corea · Capítulo 1
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: midnight
 sources:
   - Constitución de la República de Corea (Constitución n.º 10, reformada íntegramente el 29-10-1987, vigente desde el 25-02-1988) — law.go.kr
   - Texto coreano vía legalize-kr/legalize-kr · kr/대한민국헌법/헌법.md

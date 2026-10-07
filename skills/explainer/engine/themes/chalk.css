@@ -1,0 +1,29 @@
+/* chalk — classroom board: green slate, chalk-yellow and pink, dashed outlines, wavy underlines.
+   For lessons and training. */
+:root {
+  --bg: #1d3a2d;
+  --bg2: #26493a;
+  --fg: #f3f0e4;
+  --muted: #c8d2c2;
+  --accent: #ffe08a;
+  --accent2: #ff9fb4;
+  --card: rgba(255, 255, 255, 0.035);
+  --line: rgba(243, 240, 228, 0.42);
+  --active: rgba(255, 224, 138, 0.1);
+  --chip-bg: rgba(255, 159, 180, 0.1);
+  --on-accent: #1d3a2d;
+  --stage-bg: radial-gradient(1500px 1000px at 50% 30%, var(--bg2), var(--bg) 80%);
+  --texture:
+    radial-gradient(rgba(243, 240, 228, 0.07) 1px, transparent 1.5px),
+    radial-gradient(rgba(243, 240, 228, 0.05) 1px, transparent 1.5px);
+  --texture-size: 23px 29px, 37px 31px;
+  --texture-opacity: 1;
+  --sub-bg: rgba(16, 33, 25, 0.88);
+  --sub-fg: #f3f0e4;
+  --radius: 14px;
+  --border-w: 2.5px;
+  --border-style: dashed;
+  --glow: 0 0 10px rgba(255, 224, 138, 0.6);
+  --em-decoration: underline wavy var(--accent2) 3px;
+  --heading-font: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+}

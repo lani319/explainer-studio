@@ -13,6 +13,8 @@ from . import media, timeline, tts
 from .paths import ENGINE_DIR, Episode
 from .script import Script, check_same_shape, load
 
+DEFAULT_TEMPLATE = "midnight"
+
 PAGE = """<!doctype html>
 <html lang="{html_lang}">
 <head>
@@ -20,8 +22,9 @@ PAGE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
 <link rel="stylesheet" href="engine/explainer.css" />
+<link rel="stylesheet" href="engine/themes/{template}.css" />
 </head>
-<body>
+<body class="template-{template}">
 <div id="app"></div>
 <script src="timeline.js"></script>
 <script src="engine/player.js"></script>
@@ -32,24 +35,43 @@ PAGE = """<!doctype html>
 """
 
 
+def templates() -> list[str]:
+    """Design templates shipped with the engine (``engine/themes/<name>.css``)."""
+    return sorted(p.stem for p in (ENGINE_DIR / "themes").glob("*.css"))
+
+
+def resolve_template(script: Script, override: str | None) -> str:
+    name = override or str(script.meta.get("template") or DEFAULT_TEMPLATE)
+    have = templates()
+    if name not in have:
+        raise ValueError(f"unknown template '{name}' — choose one of {', '.join(have)}")
+    return name
+
+
 def build(
     ep: Episode,
     code: str,
     engine: str = "edge",
     voice: str | None = None,
+    template: str | None = None,
+    out: Path | None = None,
     log: Callable[[str], None] = print,
 ) -> dict[str, Any]:
+    """Build one language. ``template`` overrides the script's; ``out`` overrides the build folder
+    (used by the template gallery so a preview never replaces the real build)."""
     lang = langmod.load(code)
     script = load(ep.script(code))
     if script.lang != code:
         raise ValueError(f"{ep.script(code)} says lang '{script.lang}' but the file name says '{code}'")
+    tpl = resolve_template(script, template)
     _check_translations(ep, script, log)
     durations, clips = tts.synthesize(script, lang, engine=engine, voice=voice, log=log)
     tl = timeline.build(script, lang, durations)
+    tl["meta"]["template"] = tpl
     for w in timeline.pacing_warnings(script, lang, durations):
         log(f"  warn {w}")
 
-    out = ep.build_dir(code)
+    out = out or ep.build_dir(code)
     out.mkdir(parents=True, exist_ok=True)
     eng = out / "engine"
     if eng.exists():
@@ -67,7 +89,7 @@ def build(
         "window.TIMELINE = " + json.dumps(tl, ensure_ascii=False, indent=1) + ";\n", encoding="utf-8"
     )
     (out / "index.html").write_text(
-        PAGE.format(html_lang=lang.html_lang, title=_esc(script.title), extra=extra), encoding="utf-8"
+        PAGE.format(html_lang=lang.html_lang, title=_esc(script.title), template=tpl, extra=extra), encoding="utf-8"
     )
     if has_audio:
         placed = [
@@ -77,9 +99,10 @@ def build(
             if clip is not None
         ]
         media.narration_track(placed, tl["duration"], out / "narration.m4a")
-    ep.out_dir().mkdir(parents=True, exist_ok=True)
-    ep.srt(code).write_text(timeline.srt(tl, lang, script), encoding="utf-8")
-    log(f"built {ep.id} [{code}] — {len(script.sections)} sections, {tl['duration']:.1f}s → {out / 'index.html'}")
+    if out == ep.build_dir(code):
+        ep.out_dir().mkdir(parents=True, exist_ok=True)
+        ep.srt(code).write_text(timeline.srt(tl, lang, script), encoding="utf-8")
+    log(f"built {ep.id} [{code}] {tpl} — {len(script.sections)} sections, {tl['duration']:.1f}s → {out / 'index.html'}")
     return tl
 
 
@@ -99,12 +122,12 @@ def _esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def page_url(ep: Episode, code: str) -> str:
-    return (ep.build_dir(code) / "index.html").resolve().as_uri()
+def page_url(bdir: Path) -> str:
+    return (bdir / "index.html").resolve().as_uri()
 
 
-def ensure_built(ep: Episode, code: str) -> Path:
-    page = ep.build_dir(code) / "index.html"
+def ensure_built(bdir: Path) -> Path:
+    page = bdir / "index.html"
     if not page.exists():
         raise FileNotFoundError(f"{page} not found — run 'build' first")
     return page

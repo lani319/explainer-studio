@@ -3,7 +3,7 @@ id: kr-constitution-ch1
 lang: ko
 title: 대한민국 헌법 · 제1장 총강
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: midnight
 sources:
   - 대한민국헌법(헌법 제10호, 1987. 10. 29. 전부개정, 1988. 2. 25. 시행) — 국가법령정보센터 law.go.kr
   - 본문 텍스트 legalize-kr/legalize-kr · kr/대한민국헌법/헌법.md

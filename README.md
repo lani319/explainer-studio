@@ -22,7 +22,7 @@ The scripts behind them are in [examples/kr-constitution-ch1](examples/kr-consti
 
 ## How it works
 
-```
+```text
 your docs / repo ──ingest──▶ inventory ──(you + Claude)──▶ plan ──▶ script.<lang>.md
                                                                        │
             MP4 + SRT ◀──render── page (1920×1080 stage) ◀──build──────┘
@@ -53,7 +53,7 @@ Chinese and Japanese need a CJK font (Windows and macOS ship one; on Linux insta
 
 As a plugin:
 
-```
+```text
 /plugin marketplace add lani319/explainer-studio
 /plugin install explainer-studio@explainer-studio
 ```
@@ -63,6 +63,19 @@ Or copy `skills/explainer` into `~/.claude/skills/`. Then ask, for example:
 > Make a 3-minute explainer video in English and Japanese from the docs in ./docs for new team members.
 
 Claude checks your setup, inventories the material, proposes episodes and waits for your approval, then writes, builds, reviews stills and renders.
+
+### Use it from Codex
+
+The skill is plain instructions plus a Python CLI, so Codex (or any coding agent that can read files and run commands) can follow it. Clone this repository somewhere, then add a few lines to your project's `AGENTS.md`:
+
+```markdown
+## Explainer videos
+When asked to make an explainer, tutorial or training video, read
+`/path/to/explainer-studio/skills/explainer/SKILL.md` and follow its workflow.
+In that file, `<skill>` means `/path/to/explainer-studio/skills/explainer`.
+```
+
+Then ask Codex as you would ask Claude. If your Codex version loads skills from a skills folder, you can copy `skills/explainer` there instead — check your version's documentation.
 
 ### Use it by hand
 
@@ -90,12 +103,45 @@ python $S render explainer/intro             # → explainer/intro/out/intro.en.
 
 Per-language settings are plain YAML in [`skills/explainer/lang/`](skills/explainer/lang). Adding a language is one file.
 
+## Design templates
+
+Four looks, same layouts — pick one per episode. Every script works with every template.
+
+![The four design templates](docs/templates.en.png)
+
+| template | look | good for |
+|---|---|---|
+| `midnight` (default) | deep navy, sky-blue and violet accents | general explainers |
+| `paper` | warm off-white page, serif headings, ink and terracotta | documents, policies, reports |
+| `blueprint` | blue grid sheet, amber highlights, monospace labels | technical walkthroughs, code, architecture |
+| `chalk` | green chalkboard, dashed outlines, wavy underlines | lessons and training |
+
+Choose it in the script's front matter, or override it when building:
+
+```yaml
+---
+id: intro
+lang: en
+template: paper
+theme: {accent: "#e4572e"}   # optional: your brand colors on top of the template
+---
+```
+
+```bash
+python $S templates                                   # list templates
+python $S build explainer/intro --template blueprint  # try another look without editing the script
+python $S templates explainer/intro --lang en         # gallery of your episode in every template
+```
+
+When Claude plans an episode with you, it shows the gallery and asks which template to use. A template is one CSS file of design tokens in [`skills/explainer/engine/themes/`](skills/explainer/engine/themes) — copy one to make your own ([how](skills/explainer/references/templates.md)).
+
 ## Documentation
 
 - [Skill instructions](skills/explainer/SKILL.md) — the workflow Claude follows
 - [Script format](skills/explainer/references/script-format.md)
 - [Scene types](skills/explainer/references/scene-types.md) — `cover`, `cards`, `quote`, `flow`, `list`, `closing`, and custom types
 - [Languages](skills/explainer/references/languages.md)
+- [Design templates](skills/explainer/references/templates.md)
 - [Review checklist](skills/explainer/references/review.md)
 
 ## Notes

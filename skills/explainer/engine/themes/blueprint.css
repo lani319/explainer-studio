@@ -1,0 +1,30 @@
+/* blueprint — engineering drawing: blue sheet, grid lines, amber highlights, monospace labels.
+   For technical walkthroughs, code and architecture. */
+:root {
+  --bg: #0b2a4a;
+  --bg2: #10406f;
+  --fg: #e8f2ff;
+  --muted: #a6c8ea;
+  --accent: #ffd166;
+  --accent2: #7fdbff;
+  --card: rgba(11, 42, 74, 0.72);
+  --line: rgba(127, 219, 255, 0.45);
+  --active: rgba(255, 209, 102, 0.12);
+  --chip-bg: rgba(127, 219, 255, 0.1);
+  --on-accent: #0b2a4a;
+  --stage-bg: radial-gradient(1400px 900px at 70% 10%, var(--bg2), var(--bg) 75%);
+  --texture:
+    linear-gradient(rgba(127, 219, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 219, 255, 0.16) 1px, transparent 1px),
+    linear-gradient(rgba(127, 219, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 219, 255, 0.07) 1px, transparent 1px);
+  --texture-size: 128px 128px, 128px 128px, 32px 32px, 32px 32px;
+  --texture-opacity: 1;
+  --sub-bg: rgba(6, 26, 46, 0.9);
+  --sub-shadow: 0 0 0 1.5px rgba(127, 219, 255, 0.5);
+  --radius: 4px;
+  --border-w: 1.5px;
+  --glow: 0 0 12px var(--accent);
+  --label-font: "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+  --label-spacing: 0.04em;
+}

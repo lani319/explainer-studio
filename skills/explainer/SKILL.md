@@ -43,6 +43,7 @@ Ask, in one message, with a recommendation for each:
 - **Language(s)** — any of ko, en, ja, zh, es. One base language is written first; the others are translations with the same shape.
 - **Episodes** — a list: title, 3–6 sections each, what each section shows. Aim for 2–4 minutes per episode (about 8–12 sections, 2–4 narration lines each).
 - **Voice** — female (default) or male.
+- **Design template** — `midnight` (default), `paper`, `blueprint` or `chalk`. Show `docs/templates.<lang>.png` from this repository if present, or render a gallery once a draft exists (`cli.py templates <episode> --lang <code>`). Brand colors can go on top. See `references/templates.md`.
 
 Write the plan to `explainer/plan.md` and wait for approval.
 
@@ -52,7 +53,7 @@ Write the plan to `explainer/plan.md` and wait for approval.
 python <skill>/scripts/cli.py new explainer/<episode-id> --lang <base>
 ```
 
-Edit `explainer/<episode-id>/script.<lang>.md`. Format: `references/script-format.md`. Scene types and their fields: `references/scene-types.md` (`cover`, `cards`, `quote`, `flow`, `list`, `closing`). Rules of thumb:
+Edit `explainer/<episode-id>/script.<lang>.md`. Format: `references/script-format.md`. Put the chosen `template:` in the front matter. Scene types and their fields: `references/scene-types.md` (`cover`, `cards`, `quote`, `flow`, `list`, `closing`). Rules of thumb:
 - One idea per narration line; a line is one subtitle (at most two on-screen lines — `build` warns).
 - Put on-screen text in the `screen` block, never in code; narration lives in `- ` lines.
 - Use `at: <line index>` to make an item appear (and highlight) while its line is spoken.

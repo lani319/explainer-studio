@@ -3,7 +3,7 @@ id: kr-constitution-ch1
 lang: ja
 title: 大韓民国憲法・第1章 総綱
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: midnight
 sources:
   - 大韓民国憲法(憲法第10号、1987年10月29日全部改正、1988年2月25日施行)— law.go.kr
   - 韓国語本文 legalize-kr/legalize-kr ・ kr/대한민국헌법/헌법.md

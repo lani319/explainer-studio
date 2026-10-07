@@ -3,7 +3,7 @@ id: kr-constitution-ch1
 lang: zh
 title: 大韩民国宪法 · 第一章 总纲
 voice: female
-theme: {accent: "#38bdf8", accent2: "#a78bfa"}
+template: midnight
 sources:
   - 大韩民国宪法(宪法第10号，1987年10月29日全面修改，1988年2月25日施行)— law.go.kr
   - 韩文原文 legalize-kr/legalize-kr · kr/대한민국헌법/헌법.md
